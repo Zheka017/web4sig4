@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management - Управление задачами</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Auth Screen -->
+    <div id="authScreen" class="screen active">
+        <div class="auth-container">
+            <h1>📋 Управление задачами</h1>
+            
+            <!-- Login Form -->
+            <div id="loginForm" class="auth-form active">
+                <h2>Вход</h2>
+                <input type="email" id="loginEmail" placeholder="Email" required>
+                <input type="password" id="loginPassword" placeholder="Пароль" required>
+                <button onclick="handleLogin()">Войти</button>
+                <p>Нет аккаунта? <a href="#" onclick="switchToRegister()">Зарегистрироваться</a></p>
+                <div id="loginError" class="error-message"></div>
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerForm" class="auth-form">
+                <h2>Регистрация</h2>
+                <input type="text" id="registerName" placeholder="Имя" required>
+                <input type="email" id="registerEmail" placeholder="Email" required>
+                <input type="password" id="registerPassword" placeholder="Пароль (мин. 6 символов)" required>
+                <button onclick="handleRegister()">Зарегистрироваться</button>
+                <p>Уже есть аккаунт? <a href="#" onclick="switchToLogin()">Войти</a></p>
+                <div id="registerError" class="error-message"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Screen -->
+    <div id="appScreen" class="screen">
+        <nav class="navbar">
+            <div class="navbar-brand">📋 Мои задачи</div>
+            <div class="navbar-user">
+                <span id="userEmail"></span>
+                <button onclick="handleLogout()" class="btn-logout">Выход</button>
+            </div>
+        </nav>
+
+        <div class="container">
+            <!-- Create Task Section -->
+            <section class="create-task-section">
+                <h2>Создать новую задачу</h2>
+                <form onsubmit="handleCreateTask(event)">
+                    <div class="form-group">
+                        <input type="text" id="taskTitle" placeholder="Заголовок задачи" required maxlength="200">
+                        <small>Max 200 символов</small>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="taskDescription" placeholder="Описание задачи" required maxlength="5000"></textarea>
+                        <small>Max 5000 символов</small>
+                    </div>
+                    <button type="submit" class="btn-primary">+ Добавить задачу</button>
+                </form>
+                <div id="createError" class="error-message"></div>
+            </section>
+
+            <!-- Filter Section -->
+            <section class="filter-section">
+                <label>Фильтр по статусу:</label>
+                <button onclick="filterTasks('all')" class="filter-btn active" data-filter="all">Все</button>
+                <button onclick="filterTasks('pending')" class="filter-btn" data-filter="pending">⏳ Ожидание</button>
+                <button onclick="filterTasks('in-progress')" class="filter-btn" data-filter="in-progress">⚙️ В процессе</button>
+                <button onclick="filterTasks('completed')" class="filter-btn" data-filter="completed">✅ Завершено</button>
+            </section>
+
+            <!-- Tasks List -->
+            <section class="tasks-section">
+                <h2>Мои задачи</h2>
+                <div id="tasksContainer" class="tasks-container">
+                    <div class="loading">Загрузка задач...</div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Edit Task Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditModal()">&times;</span>
+            <h2>Редактировать задачу</h2>
+            <form onsubmit="handleUpdateTask(event)">
+                <div class="form-group">
+                    <label>Статус:</label>
+                    <select id="editStatus">
+                        <option value="pending">⏳ Ожидание</option>
+                        <option value="in-progress">⚙️ В процессе</option>
+                        <option value="completed">✅ Завершено</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">Сохранить</button>
+                <button type="button" onclick="closeEditModal()" class="btn-secondary">Отмена</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading & Error Messages -->
+    <div id="notification" class="notification"></div>
+
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
